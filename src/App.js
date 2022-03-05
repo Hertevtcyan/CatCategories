@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useEffect } from "react";
+import SideMenu from "./Components/Layout/SideMenu/SideMenu";
+import { useSelector, useDispatch } from "react-redux";
+import { getCatCategories } from "./store/actions/catCategoriesActions";
+import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
+import PicGallery from "./Pages/PicGallery";
 
-function App() {
+export const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    padding:0;
+  }
+`;
+
+const App = () => {
+  const dispatch = useDispatch();
+
+  const categories = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(getCatCategories());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <GlobalStyle />
+      <Container>
+        <SideMenu categories={categories} />
+        <PicGallery />
+      </Container>
+    </Fragment>
   );
-}
+};
 
 export default App;
